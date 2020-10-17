@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>RNA</title>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  </head>
+  <body>
+
+    <form class="" action="/" method="post">
+
+      <input type="text" name="seq" value="">
+      <input type="submit" name="butt" value="send seq">
+
+    </form>
+
+    <div id='result' class="context">{{sentence}}</div>
+    <div id='sep' class="context">{{sep}}</div>
+
+    <script>
+      $( document ).ready(function() {
+
+        htm = $('#result').html()
+        var sep = $('#sep').text().trim()
+
+        if (htm.match(sep)){
+            htm = htm.replace(sep , "<span style='background-color:yellow'>{{sep}}</span>")
+            $('#result').html(htm)
+        }
+
+      });
+
+    </script>
+
+  </body>
+</html>
