@@ -7,6 +7,7 @@
 
 ##
 from flask import Flask, render_template, request, redirect    # Flask imports
+import os
 
 app = Flask(__name__)
 
@@ -37,6 +38,7 @@ def index():
 
 
 if __name__ == '__main__':
+    os.environ.setdefault('FLASK_ENV', 'development')
     port = 5033
     host = '0.0.0.0'
     app.run(port=port, host=host)
