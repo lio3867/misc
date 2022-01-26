@@ -38,5 +38,5 @@ def index():
 
 if __name__ == '__main__':
     port = 5033
-    host = '127.0.0.1'
+    host = '0.0.0.0'
     app.run(port=port, host=host)
