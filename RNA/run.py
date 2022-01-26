@@ -11,7 +11,8 @@ from flask import Flask, render_template, request, redirect    # Flask imports
 app = Flask(__name__)
 
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SECRET_KEY'] = 'F34TF$($e34D';
+app.config['SECRET_KEY'] = 'F34TF$($e34D'
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -28,12 +29,14 @@ def index():
         except:
             sentence = d[0]
             sep = ''
-        dicseq = {'sentence':sentence, 'sep':sep}
+        dicseq = {'sentence': sentence, 'sep': sep}
 
-        return render_template('index.html',**dicseq) #, {'sentence':'ATGGCCA'}
+        # {'sentence':'ATGGCCA'}
+        return render_template('index.html', **dicseq)
     return render_template('index.html')
 
 
 if __name__ == '__main__':
-    port = 5033; host = '127.0.0.1'
-    app.run(port = port, host = host)
+    port = 5033
+    host = '127.0.0.1'
+    app.run(port=port, host=host)
