@@ -50,5 +50,5 @@ class define_main_page(define_page):
         Page (index_folder.html) for entering the parameters and launching the processings.
         '''
         define_page.__init__(self)
-        #print( f'platf is { platf }' )
+        #print(f'platf is { platf }')
         self.platf = platf

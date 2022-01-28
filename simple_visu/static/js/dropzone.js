@@ -163,7 +163,7 @@
         _ref = this.element.getElementsByTagName("div");
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           child = _ref[_i];
-          if (/(^| )dz-message($| )/.test(child.className)) {
+          if (/(^|)dz-message($|)/.test(child.className)) {
             messageElement = child;
             child.className = "dz-message";
             continue;
@@ -755,7 +755,7 @@
         var el, _i, _len;
         for (_i = 0, _len = elements.length; _i < _len; _i++) {
           el = elements[_i];
-          if (/(^| )fallback($| )/.test(el.className)) {
+          if (/(^|)fallback($|)/.test(el.className)) {
             return el;
           }
         }
@@ -1461,7 +1461,7 @@
         _results = [];
         for (_i = 0, _len = elements.length; _i < _len; _i++) {
           el = elements[_i];
-          if (/(^| )dropzone($| )/.test(el.className)) {
+          if (/(^|)dropzone($|)/.test(el.className)) {
             _results.push(dropzones.push(el));
           } else {
             _results.push(void 0);

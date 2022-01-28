@@ -14,27 +14,18 @@ python -m simple_visu.run
 """
 from __future__ import print_function, division, absolute_import
 
-import errno, os, sys, glob, logging
-import yaml, csv, json
-from random import randint
+from colorama import Fore, Style            # Color in the Terminal
+import os
+import yaml
+import json
 op = os.path
 opd, opb, opj = op.dirname, op.basename, op.join
-import shutil as sh
-from colorama import Fore, Back, Style                           # Color in the Terminal
-import time
-from datetime import datetime
-import subprocess
-import multiprocessing
 
-##
-import threading, webbrowser
+import threading
+import webbrowser
 from sys import platform as _platform
-
 ##
-from matplotlib import pyplot as plt
-import numpy as np
-##
-from flask import Flask, render_template, request, redirect                      # Flask imports
+from flask import Flask, render_template, request, redirect     # Flask imports
 from flask_socketio import SocketIO, emit
 from simple_visu.modules.pages.define_all_pages import *
 from simple_visu.modules.util_interf import *
@@ -49,16 +40,19 @@ else:
     import eventlet as server
     server.monkey_patch()
 
-Debug = True                                                                       # Debug Flask
+Debug = True                                             # Debug Flask
 
 app = Flask(__name__)
-app.config['UPLOADED_PATH'] = opj(os.getcwd(),'simple_visu','upload')              # upload directory from the Dropzone
-print("######### app.config['UPLOADED_PATH'] is {0} !!!".format(app.config['UPLOADED_PATH']))
+# upload directory from the Dropzone
+app.config['UPLOADED_PATH'] = opj(os.getcwd(), 'simple_visu', 'upload')
+print(f"######### app.config['UPLOADED_PATH']"
+      f" is {app.config['UPLOADED_PATH']} !!!")
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SECRET_KEY'] = 'F34TF$($e34D';
+app.config['SECRET_KEY'] = 'F34TF$($e34D'
 socketio = SocketIO(app)
 
-@socketio.on('connect') #  , namespace='/test'
+
+@socketio.on('connect')
 def test_connect():
     '''
     Websocket connection
@@ -67,102 +61,115 @@ def test_connect():
     emit('response', 'Connected')
     server.sleep(0.05)
 
+
 @app.route('/', methods=['GET', 'POST'])
-def main_page(debug=1):
+def main_page():
     '''
     '''
     platf = find_platform()
-    print( f'platf is { platf }' )
+    print(f'platf is { platf }')
     dmp = define_main_page(platf)
     return render_template('index_folder.html', **dmp.__dict__)
+
 
 def send_nb_pics():
     '''
     Sending the number of pictures
     '''
-    with open('simple_visu/nb_pics.yaml','r') as f:
-        nb_pics = yaml.load( f, Loader=yaml.FullLoader )
-        print( f'nb_pics is { nb_pics }' )
-    emit( 'nb_pics', nb_pics )
+    with open('simple_visu/nb_pics.yaml', 'r') as f_r:
+        nb_pics = yaml.load(f_r, Loader=yaml.FullLoader)
+        print(f'nb_pics is { nb_pics }')
+    emit('nb_pics', nb_pics)
 
-@socketio.on('mess') #  ,
+
+@socketio.on('mess')
 def receiving_mess(mess):
     '''
     Receiving a message
     '''
-    print( f"mess is { mess }" )
+    print(f"mess is { mess }")
     emit('refresh', "")
 
-@socketio.on('retrieve_title') #  ,
+
+@socketio.on('retrieve_title')
 def retrieve_title():
     '''
     Searching for the title
     '''
-    with open('jupyter_for_analysis/experim_title.yaml','r') as f:
-        title = yaml.load( f, Loader=yaml.FullLoader )
-    #print( f'The title of the experiment is { title }' )
+    with open('jupyter_for_analysis/experim_title.yaml', 'r') as f_r:
+        title = yaml.load(f_r, Loader=yaml.FullLoader)
+    # print(f'The title of the experiment is { title }')
     emit('title', title)
 
-@socketio.on('select_all_cells') #
+
+@socketio.on('select_all_cells')
 def select_all_cells(frm_pos):
     '''
     Select all the cells in the current frame
     '''
-    reinit_cells('whatever')
-    ldic_frm_pos = make_ldic_frm_obj(frm_pos, 'pos')                             # frame and positions
-    with open('jupyter_for_analysis/pos.yaml','w') as f:
-        yaml.dump( ldic_frm_pos, f )                                             # select all the cells
+    reinit_cells()
+    ldic_frm_pos = make_ldic_frm_obj(frm_pos, 'pos')      # frame and positions
+    with open('jupyter_for_analysis/pos.yaml', 'w') as f:
+        yaml.dump(ldic_frm_pos, f)                       # select all the cells
 
-@socketio.on('reinit_cells') #
-def reinit_cells(mess):
+
+@socketio.on('reinit_cells')
+def reinit_cells():
     '''
     Empty pos.yaml file..
     '''
-    with open('jupyter_for_analysis/pos.yaml','w') as f:
-        yaml.dump( [], f )                                                       # reinit pos.yaml
-    with open('jupyter_for_analysis/selected_area.yaml','w') as f:
-        yaml.dump( [], f )                                                       # reinit selected_area.yaml
+    with open('jupyter_for_analysis/pos.yaml', 'w') as f_w:
+        yaml.dump([], f_w)                          # reinit pos.yaml
+    with open('jupyter_for_analysis/selected_area.yaml', 'w') as f_w:
+        yaml.dump([], f_w)                        # reinit selected_area.yaml
+
 
 def make_ldic_frm_obj(frm_obj, obj):
     '''
     list of dictionaries { frame, x, y }
     '''
     try:
-        with open( f'jupyter_for_analysis/{ obj }.yaml' ,'r') as f:
-            ldic_frm_obj = yaml.load( f, Loader=yaml.FullLoader )
+        with open(f'jupyter_for_analysis/{ obj }.yaml', 'r') as f_w:
+            ldic_frm_obj = yaml.load(f_w, Loader=yaml.FullLoader)
     except:
         ldic_frm_obj = []
-    if ldic_frm_obj and ldic_frm_obj!= list:
-        if type( ldic_frm_obj ) == dict:
+    if ldic_frm_obj and ldic_frm_obj != list:
+        if type(ldic_frm_obj) == dict:
             ldic_frm_obj = [ ldic_frm_obj ]
     else:
         ldic_frm_obj = []
-    frm_obj = json.loads( frm_obj )
+    frm_obj = json.loads(frm_obj)
     ldic_frm_obj += [ frm_obj ]
 
     return ldic_frm_obj
 
-@socketio.on('mouse_pos') #  ,
+
+@socketio.on('mouse_pos')
 def mousepos(frm_pos, debug=[0]):
     '''
     Mouse position
     '''
-    if 0 in debug: print( f"Mouse position is { frm_pos }" )
-    ldic_frm_pos = make_ldic_frm_obj(frm_pos, 'pos')                            # frame and positions
-    with open( 'jupyter_for_analysis/pos.yaml','w' ) as f:
-        yaml.dump( ldic_frm_pos, f )                                            # dump the list of dictionaries
-        print( f'save pos { ldic_frm_pos }' )
+    if 0 in debug:
+        print(f"Mouse position is { frm_pos }")
+    ldic_frm_pos = make_ldic_frm_obj(frm_pos, 'pos')      # frame and positions
+    with open('jupyter_for_analysis/pos.yaml', 'w') as f:
+        yaml.dump(ldic_frm_pos, f)              # dump the list of dictionaries
+        print(f'save pos { ldic_frm_pos }')
 
-@socketio.on('select_area') #  ,
+
+@socketio.on('select_area')
 def select_area(frm_rect_coord, debug=[0]):
     '''
     Selected area
     '''
-    if 0 in debug: print( f"Selected area is { frm_rect_coord }" )
-    ldic_frm_coord = make_ldic_frm_obj(frm_rect_coord, 'selected_area')         # frame and rectangle coordinates
-    with open( 'jupyter_for_analysis/selected_area.yaml','w' ) as f:
-        yaml.dump( ldic_frm_coord, f )                                          # dump dic_frm_coord
-        print( f'save ldic_frm_coord { ldic_frm_coord }' )
+    if 0 in debug:
+        print(f"Selected area is { frm_rect_coord }")
+    # frame and rectangle coordinates
+    ldic_frm_coord = make_ldic_frm_obj(frm_rect_coord, 'selected_area')
+    with open('jupyter_for_analysis/selected_area.yaml', 'w') as f:
+        yaml.dump(ldic_frm_coord, f)                     # dump dic_frm_coord
+        print(f'save ldic_frm_coord { ldic_frm_coord }')
+
 
 def shutdown_server():
     '''
@@ -174,6 +181,7 @@ def shutdown_server():
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
 
+
 @app.route('/shutdown')
 def shutdown():
     '''
@@ -183,10 +191,11 @@ def shutdown():
 
     return 'Server shutting down...'
 
-def message_at_beginning(host,port):
+
+def message_at_beginning(host, port):
     '''
     '''
-    print( Fore.YELLOW + f"""
+    print(Fore.YELLOW + f"""
     ***************************************************************
     Launching the simple_visu server program !!!
 
@@ -201,13 +210,15 @@ def message_at_beginning(host,port):
     Change each time the port !!!
     perhaps using random port..
 
-    """ )
+    """)
+
 
 if __name__ == '__main__':
-    init(app.config)                                             # clean last processings and upload folders
+    init(app.config)                # clean last processings and upload folders
 
-    port = 5975; host = '0.0.0.0'                                #  simple_visu.run
-    print("host is " , host)
-    message_at_beginning(host,port)
+    port = 5975
+    host = '0.0.0.0'                                # simple_visu.run
+    print("host is ", host)
+    message_at_beginning(host, port)
     print(Style.RESET_ALL)
-    socketio.run(app, port = port, host = host)
+    socketio.run(app, port=port, host=host)

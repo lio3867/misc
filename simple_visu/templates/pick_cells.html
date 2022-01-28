@@ -7,10 +7,10 @@ $("#curr_proc_pic").click(function(e){                                          
     var y = e.pageY - parentOffset.top;
     //var mouse_pos = 'frame ' + frame_index + ' x ' + x + ' y ' + y                   // frame index , x, y
     var dic_frm_pos = { 'frame': frame_index , 'x': x , 'y': y }
-    str_frm_pos = JSON.stringify( dic_frm_pos )
-    //$('#mouse_pos').text( mouse_pos )
+    str_frm_pos = JSON.stringify(dic_frm_pos)
+    //$('#mouse_pos').text(mouse_pos)
     if (click_cell){
-        socket.emit( "mouse_pos", str_frm_pos )
+        socket.emit("mouse_pos", str_frm_pos)
     }
 
   })

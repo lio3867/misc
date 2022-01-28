@@ -26,7 +26,7 @@ var docstyle = function(){
           var txt = $(this).text()
           if (txt.match(/\$triple/)){
             // alert('found !!!')
-            newtxt = txt.replace('$triple', '' )
+            newtxt = txt.replace('$triple', '')
             var pt = $('</p>').text('.').css({'color':'white'})
             $(this).after(pt).after(pt).after(pt).after(pt).after(pt)
             $(this).text(newtxt)
@@ -51,7 +51,7 @@ var docstyle = function(){
 
         $('#titletoc').click(function(){
              $('.sub').toggle()
-           if( $('.toc').css('height') == 'auto'){
+           if($('.toc').css('height') == 'auto'){
               $('.toc').css({'height':'50px'})
            }
            else{

@@ -283,7 +283,7 @@ button.ui-button::-moz-focus-inner {
 
 	/* Support: IE8 only, Android < 4.4 only */
 	width: 75%;
-	width: calc( 100% - 2.4em );
+	width: calc(100% - 2.4em);
 }
 .ui-controlgroup-vertical .ui-spinner .ui-spinner-up {
 	border-top-style: solid;

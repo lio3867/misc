@@ -3,7 +3,7 @@ var show_only_progress = function(){
 
   $('.dz-preview').each(function(){
     var width = parseInt($(this).find('.dz-upload').css('width').split('%')[0])
-    if ( width < 2 | width > 99 ) {
+    if (width < 2 | width > 99) {
         $(this).hide()
     }else{ $(this).show() }
     //alert(width)
@@ -41,8 +41,8 @@ var manage_drop = function(){
                                       .addClass('check')
                                       .attr('id', 'box_' + newpath)
                                       .attr('type', "checkbox").css({'left':'280px', 'top':'-10px'})
-                                    )  // end append
-                                  ) // end append
+                                   )  // end append
+                                 ) // end append
 
                     list_addr.push(newpath)                 // registering the path
                    }                                        // end !find_rfp

@@ -48,12 +48,12 @@
 
       // the drag is over, clear the dragging flag
       isDown = false;
-      //alert( x1 + ',' + x2 + ',' + y1 + ',' + y2)
+      //alert(x1 + ',' + x2 + ',' + y1 + ',' + y2)
       var dic_frm_rect_coord = { 'frame': frame_index , 'x1': x1,
                                     'x2': x2 , 'y1': y1, 'y2': y2 }
-      str_frm_coord = JSON.stringify( dic_frm_rect_coord )
-      //alert( str_frm_coord )
-      socket.emit( "select_area", str_frm_coord )                                // send the coordinates
+      str_frm_coord = JSON.stringify(dic_frm_rect_coord)
+      //alert(str_frm_coord)
+      socket.emit("select_area", str_frm_coord)                                // send the coordinates
   }
 
   function handleMouseOut(e) {
