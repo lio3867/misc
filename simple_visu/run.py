@@ -96,10 +96,11 @@ def retrieve_title():
     '''
     Searching for the title
     '''
-    with open('jupyter_for_analysis/experim_title.yaml', 'r') as f_r:
-        title = yaml.load(f_r, Loader=yaml.FullLoader)
-    # print(f'The title of the experiment is { title }')
-    emit('title', title)
+    print('ask for title')
+    # with open('jupyter_for_analysis/experim_title.yaml', 'r') as f_r:
+    #     title = yaml.load(f_r, Loader=yaml.FullLoader)
+    # # print(f'The title of the experiment is { title }')
+    # emit('title', title)
 
 
 @socketio.on('select_all_cells')
@@ -114,14 +115,15 @@ def select_all_cells(frm_pos):
 
 
 @socketio.on('reinit_cells')
-def reinit_cells():
+def reinit_cells(msg):
     '''
     Empty pos.yaml file..
     '''
-    with open('jupyter_for_analysis/pos.yaml', 'w') as f_w:
-        yaml.dump([], f_w)                          # reinit pos.yaml
-    with open('jupyter_for_analysis/selected_area.yaml', 'w') as f_w:
-        yaml.dump([], f_w)                        # reinit selected_area.yaml
+    print('helllloooo')
+    # with open('jupyter_for_analysis/pos.yaml', 'w') as f_w:
+    #     yaml.dump([], f_w)                          # reinit pos.yaml
+    # with open('jupyter_for_analysis/selected_area.yaml', 'w') as f_w:
+    #     yaml.dump([], f_w)                        # reinit selected_area.yaml
 
 
 def make_ldic_frm_obj(frm_obj, obj):
