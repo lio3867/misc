@@ -1,0 +1,25 @@
+
+
+
+<div id='win_num_im' ></div>
+
+
+<script >
+
+  $(document).ready(function(){
+
+          var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+          socket.on('response', function(mess){
+                alert(mess)
+          })
+          max_nb_im = 0
+          socket.on('nb_pics', function(nb_pics){
+              max_nb_im = nb_pics                                                             // number of frames
+              alert('max_nb_im ' + max_nb_im)
+             })
+
+
+  });
+
+</script>
